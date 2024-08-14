@@ -1,0 +1,11 @@
+# DEV DEPENDENCIES
+node_modules/
+
+# BUILD FILES
+build/
+
+# ENV FILES
+.env
+
+# SYS
+.DS_Store

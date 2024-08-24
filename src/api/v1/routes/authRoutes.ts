@@ -1,11 +1,13 @@
 import { Router } from "express";
 import {
-  signup
+  signup,
+  signin
 } from "../controllers/authController";
 
 const router = Router();
 
 router
-  .post('/', signup)
+  .post('/signup', signup)
+  .post('/signin', signin)
 
 export default router;

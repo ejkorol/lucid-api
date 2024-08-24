@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String      @id @default(uuid())
+  username      String      @unique @db.VarChar(20)
+  first_name    String
+  last_name     String
+  email         String      @unique
+  password      String      
+  mbti          String      @db.VarChar(4)
+  dob_date      String
+  dob_time      String
+  dob_location  String
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  birthchart    BirthChart?
+  dreams        Dream[]
+  symbols       Symbol[]
+  tags          Tag[]
+  @@map("users")
+}
+
+model BirthChart {
+  id          String      @id @default(uuid())
+  userId      String      @unique
+  sun         String
+  moon        String
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id])
+  @@map("birthcharts")
+}
+
+model Dream {
+  id            String        @id @default(uuid())
+  userId        String        @unique
+  title         String        @db.Text
+  context       String        @db.Text
+  analysis      String        @db.Text
+  image         String        @db.VarChar(255)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id])
+  SymbolDream   SymbolDream[]
+  tags          TagDream[]
+  @@map("dreams")
+}
+
+model Symbol {
+  id            String        @id @default(uuid())
+  userId        String        @unique
+  name          String
+  analysis      String        @db.Text
+  image         String        @db.VarChar(255)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id])
+  symbolDream   SymbolDream[]
+  @@map("symbols")
+}
+
+model SymbolDream {
+  id          String      @id @default(uuid())
+  symbolId    String      @unique
+  dreamId     String      @unique
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  symbol      Symbol      @relation(fields: [symbolId], references: [id])
+  dream       Dream       @relation(fields: [dreamId], references: [id])
+  @@map("symbol_dream")
+}
+
+model Tag {
+  id          String      @id @default(uuid())
+  name        String
+  userId      String      @unique
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id])
+  dreams      TagDream[]
+  @@map("tags")
+}
+
+model TagDream {
+  id          String    @id @default(uuid())
+  tagId       String    @unique
+  dreamId     String    @unique
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tag         Tag       @relation(fields: [tagId], references: [id])
+  dream       Dream     @relation(fields: [dreamId], references: [id])
+  @@map("tag_dream")
+}

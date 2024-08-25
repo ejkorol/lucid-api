@@ -32,10 +32,19 @@ export class UnknownError extends ApiError {
   };
 };
 
+// Validation Error
 export class ValidationError extends ApiError {
   constructor(message: string = "Validation Error") {
     super(message, 400);
     this.name = "Validation Error";
+  };
+};
+
+// Authorization Error
+export class AuthorizationError extends ApiError {
+  constructor(message: string = "Authorization Error") {
+    super (message, 401);
+    this.name = "Authorization Error";
   };
 };
 

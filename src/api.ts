@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import v1Routes from "./api/v1";
 import { errorHandler } from "./api/middleware/errorHandler";
 
@@ -7,6 +8,7 @@ const api: Application = express();
 
 api.use(express.json());
 api.use(cors());
+api.use(cookieParser());
 
 api.use('/api/v1', v1Routes);
 

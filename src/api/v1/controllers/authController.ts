@@ -19,7 +19,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
   try {
     const credentials = req.body;
     const token = await signinService(credentials);
-    res.send(token);
+    res.json(token);
   } catch(e) {
     next(e)
   };

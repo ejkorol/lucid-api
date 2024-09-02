@@ -53,3 +53,21 @@ export const signin = async (credentials: Credentials) => {
     throw errorHandler(e);
   };
 };
+
+export const verify = async (credential: string) => {
+  try {
+    const found = await db.user.findFirst({
+      where: {
+        OR: [
+          { username: credential },
+          { email: credential }
+        ]
+      }
+    });
+
+    if (found) return { status: true };
+    return { status: false };
+  } catch(e) {
+    throw errorHandler(e);
+  };
+};

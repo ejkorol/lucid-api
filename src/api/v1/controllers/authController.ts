@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 
 import {
   signup as signupService,
-  signin as signinService
+  signin as signinService,
+  verify as verifyService
 } from "../services/authService";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,6 +22,16 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
     const token = await signinService(credentials);
     res.json(token);
   } catch(e) {
-    next(e)
+    next(e);
+  };
+};
+
+export const verify = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const credential = req.params.credential;
+    const status = await verifyService(credential);
+    res.json(status);
+  } catch(e) {
+    next(e);
   };
 };

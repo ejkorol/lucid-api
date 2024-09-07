@@ -1,5 +1,2 @@
-declare module "astronomia"
-declare module "astronomia/coord"
-declare module "astronomia/globe"
-declare module "astronomia/data"
-declare module "astronomy-engine"
+declare module "astronomia";
+declare module "astronomia/data";

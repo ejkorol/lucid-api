@@ -1,6 +1,7 @@
 import db from "@/utils/db";
 import { errorHandler } from "@/utils/errors";
 import { hashPassword, compareHash, issueJWT } from "@/utils/auth";
+import { getSigns } from "@/utils/birthChart";
 import {
   userSchema,
   User,
@@ -11,14 +12,24 @@ import {
 export const signup = async (user: User) => {
   try {
     const newUser = userSchema.parse(user);
-
     const hashedPassword = await hashPassword(newUser.password);
+    const zodiacs = getSigns(user.dob_date, user.dob_time);
 
-    await db.user.create({
-      data: {
-        ...newUser,
-        password: hashedPassword
-      },
+    await db.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
+        data: {
+          ...newUser,
+          password: hashedPassword,
+        },
+      });
+
+      await tx.birthChart.create({
+        data: {
+          userId: createdUser.id,
+          sun: zodiacs.sunSign.name,
+          moon: zodiacs.moonSign.name,
+        },
+      });
     });
 
   } catch (e) {

@@ -85,3 +85,9 @@ export const verifyJWT = async (token: string) => {
     throw e;
   };
 };
+
+export interface UserToken {
+  userId: string;
+  email: string;
+  user: string;
+};

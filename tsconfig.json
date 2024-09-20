@@ -16,5 +16,18 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./types/decs.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "./types/decs.d.ts"
+  ],
+  "ts-node": {
+    "files": true
   }
 }

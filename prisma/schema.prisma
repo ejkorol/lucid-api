@@ -15,15 +15,16 @@ datasource db {
 
 model User {
   id            String      @id @default(uuid())
-  username      String      @unique @db.VarChar(20)
   first_name    String
-  last_name     String
+  last_name     String?
   email         String      @unique
   password      String      
   mbti          String      @db.VarChar(4)
   dob_date      String
   dob_time      String
-  dob_location  String
+  birth_country String
+  birth_state   String
+  birth_city    String
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt

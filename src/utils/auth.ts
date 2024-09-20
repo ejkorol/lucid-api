@@ -3,6 +3,7 @@ import * as jose from "jose";
 import { User } from "@prisma/client";
 
 const saltRounds = 10;
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET has not been configured");
@@ -55,11 +56,8 @@ export const compareHash = async (password: string, hash: string): Promise<boole
 };
 
 // Issue JWT
-export const issueJWT = async (user: User) => {
+export const issueJWT = async (user: User): Promise<string> => {
   try {
-
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-
     const token = await new jose.SignJWT({
       userId: user.id,
       email: user.email,
@@ -74,4 +72,22 @@ export const issueJWT = async (user: User) => {
     console.error(e);
     throw e;
   };
+};
+
+// Verify JWT
+export const verifyJWT = async (token: string) => {
+  try {
+    if (!token) return;
+    const { payload } = await jose.jwtVerify(token, secret);
+    return payload;
+  } catch(e) {
+    console.error(e);
+    throw e;
+  };
+};
+
+export interface UserToken {
+  userId: string;
+  email: string;
+  user: string;
 };
